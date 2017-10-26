@@ -35,7 +35,14 @@ if (NOT MongoDB_EXPOSE_MACROS)
 endif()
 configure_file("include/mongo_ros/config.h.in" "${CATKIN_DEVEL_PREFIX}/include/mongo_ros/config.h")
 
+# include_directories(${CATKIN_DEVEL_PREFIX}/include include ${catkin_INCLUDE_DIRS} ${MongoDB_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
+# we want to find mongo.h under /usr/include, not /opt/ros/..
+set(ENV{CPATH} "") # delete CPATH
 include_directories(${CATKIN_DEVEL_PREFIX}/include include ${catkin_INCLUDE_DIRS} ${MongoDB_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
+foreach(catkin_INCLUDE_DIR ${catkin_INCLUDE_DIRS})
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -idirafter ${catkin_INCLUDE_DIR}") # make sure /opt/ros/.. located after system path (/usr/include)
+endforeach()
+
 link_directories(${catkin_LINK_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 

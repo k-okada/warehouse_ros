@@ -19,11 +19,11 @@ set(MongoDB_PossibleIncludePaths
   $ENV{SystemDrive}/Mongo/*/include
   )
 find_path(MongoDB_INCLUDE_DIR mongo/client/dbclient.h
-  ${MongoDB_PossibleIncludePaths})
+  ${MongoDB_PossibleIncludePaths} NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH) # To avoid find mongo/client under /opt/ros/...
 
 if(MongoDB_INCLUDE_DIR)
   find_path(MongoDB_dbclientinterface_Path mongo/client/dbclientinterface.h
-    ${MongoDB_PossibleIncludePaths})
+    ${MongoDB_PossibleIncludePaths} NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH)
   if (MongoDB_dbclientinterface_Path)
     set(MongoDB_EXPOSE_MACROS "YES")
   endif()
@@ -48,7 +48,7 @@ else(WIN32)
     /usr/local/lib64/mongo
     /opt/mongo/lib
     /opt/mongo/lib64
-    )
+    NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH)
 endif(WIN32)
 
 if(MongoDB_INCLUDE_DIR AND MongoDB_LIBRARIES)
